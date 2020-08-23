@@ -13,12 +13,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.mylibrary.ListItem;
+import com.example.mylibrary.ShiPin;
+import com.example.mylibrary.ShiPinShouYe;
+import com.example.mylibrary.TuPian;
 
 import java.util.List;
 
 public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> {
     private Context mContext;
-    private List<Fruit> mFruitList;
+    private List<ListItem> mFruitList;
+    ShiPin shiPin = new ShiPin();
+    String[] shipin = shiPin.shipinbofang;
+    ShiPinShouYe shiPinShouYe = new ShiPinShouYe();
+    String[] shipinshouye = shiPinShouYe.shipinsouye;
+    Httptxt httptxt1 = new Httptxt();
     static class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         ImageView fruitImage;
@@ -31,7 +40,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
 
         }
     }
-    public FruitAdapter(List<Fruit> fruitList){
+    public FruitAdapter(List<ListItem> fruitList){
         mFruitList=fruitList;
     }
     @Override
@@ -45,29 +54,31 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
            @Override
            public void onClick(View v) {
                int position=holder.getAdapterPosition();
-               Fruit fruit=mFruitList.get(position);
-               if(fruit.getName().equals("java环境变量win10")){
+               /*ListItem listItem=mFruitList.get(position);
+               //if(fruit.getName().equals("java环境变量win10")){
                    Intent intent=new Intent(mContext,FuritActivity1.class);
-                   intent.putExtra(FuritActivity1.FRUIT_NAME,fruit.getName());
-                   intent.putExtra(FuritActivity1.FRUIT_IMAGE_ID,fruit.getImageId());
-                   intent.putExtra("Uri","https://top1-video-public.cdn.bcebos.com/97bfefaef0024885681ac693c58b0e901e881bf6.mp4");
-                   intent.putExtra("name", fruit.getName());
-                   mContext.startActivity(intent);
-               }else if(fruit.getName().equals("eclipse安装教程")){
+                   intent.putExtra(FuritActivity1.FRUIT_NAME,listItem.getName());
+                   intent.putExtra(FuritActivity1.FRUIT_IMAGE_ID,listItem.getImageId());
+                   intent.putExtra("Uri",shipin[position]);
+                   intent.putExtra("name", listItem.getName());
+                   intent.putExtra("UriTuPian",shipinshouye[position]);
+                   mContext.startActivity(intent);*/
+               sendRequestWithOkHttp(position);
+               /*}else if(fruit.getName().equals("eclipse安装教程")){
                    Intent intent=new Intent(mContext,FuritActivity1.class);
                    intent.putExtra(FruitActivity.FRUIT_NAME,fruit.getName());
                    intent.putExtra(FruitActivity.FRUIT_IMAGE_ID,fruit.getImageId());
-                   intent.putExtra("Uri","https://top1-video-public.cdn.bcebos.com/d2d0c13849f70fd626249c3ce8c4f465c7acb739.mp4");
+                   intent.putExtra("Uri",shipin[position]);
                    intent.putExtra("name", fruit.getName());
                    mContext.startActivity(intent);
                }else if(fruit.getName().equals("MySQL下载与安装教程视频")){
                    Intent intent=new Intent(mContext,FuritActivity1.class);
                    intent.putExtra(FruitActivity.FRUIT_NAME,fruit.getName());
                    intent.putExtra(FruitActivity.FRUIT_IMAGE_ID,fruit.getImageId());
-                   intent.putExtra("Uri","https://top1-video-public.cdn.bcebos.com/cd6f31ff79622d4eb09609100a4b9960f26832b6.mp4");
+                   intent.putExtra("Uri",shipin[position]);
                    intent.putExtra("name", fruit.getName());
                    mContext.startActivity(intent);
-               }
+               }*/
            }
        });
        return holder;
@@ -75,7 +86,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder( ViewHolder holder, int position) {
-        Fruit fruit=mFruitList.get(position);
+        ListItem fruit=mFruitList.get(position);
         holder.fruitName.setText(fruit.getName());
         Glide.with(mContext).load(fruit.getImageId()).into(holder.fruitImage);
     }
@@ -83,5 +94,25 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return mFruitList.size();
+    }
+    public void sendRequestWithOkHttp(final int num) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String Uri = httptxt1.openFile(num+1,"https://cdn.jsdelivr.net/gh/huanghaozi/Storage4App@master/20200820/2020082005193071e67f94107cf72a5f8599fbe745c904.txt");
+                    ListItem listItem=mFruitList.get(num);
+                    Intent intent=new Intent(mContext,FuritActivity1.class);
+                    intent.putExtra(FuritActivity1.FRUIT_NAME,listItem.getName());
+                    intent.putExtra(FuritActivity1.FRUIT_IMAGE_ID,listItem.getImageId());
+                    intent.putExtra("Uri",Uri);
+                    intent.putExtra("name", listItem.getName());
+                    intent.putExtra("UriTuPian",shipinshouye[num]);
+                    mContext.startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.example.myapplication_8865"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -45,4 +45,5 @@ dependencies {
     implementation 'com.commit451:PhotoView:1.2.4'
     implementation 'com.github.recruit-lifestyle:WaveSwipeRefreshLayout:1.6'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
+    implementation 'com.github.abcABC747289656:ZiYuanKu:v1.0.7'
 }

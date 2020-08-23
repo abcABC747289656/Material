@@ -14,11 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication_8865.view.BigImgActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -114,7 +112,8 @@ public static final String FRUIT_IMAGE_ID="fruit_image_id";
     }
     public void JcVideoPlayerStandard(){
         jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.jc_video);
-        jcVideoPlayerStandard.setUp("https://top1-video-public.cdn.bcebos.com/97bfefaef0024885681ac693c58b0e901e881bf6.mp4", JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "我的视频");
+        jcVideoPlayerStandard.setUp("https://top1-video-public.cdn." +
+                "bcebos.com/97bfefaef0024885681ac693c58b0e901e881bf6.mp4", JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "我的视频");
         jcVideoPlayerStandard.thumbImageView.setImageResource(R.mipmap.java);
     }
 

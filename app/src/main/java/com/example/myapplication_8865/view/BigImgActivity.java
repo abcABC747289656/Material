@@ -1,4 +1,4 @@
-package com.example.myapplication_8865;
+package com.example.myapplication_8865.view;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 
+import com.example.myapplication_8865.R;
 import com.example.myapplication_8865.adapter.PhotoPagerAdapter;
 import com.example.myapplication_8865.view.ViewPagerFixed;
 

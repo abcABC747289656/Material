@@ -1,5 +1,7 @@
 package com.example.myapplication_8865;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.support.v4.widget.DrawerLayout;
@@ -12,142 +14,97 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.mylibrary.ListItem;
+import com.example.mylibrary.Save;
+import com.example.mylibrary.ShiPin;
+import com.example.mylibrary.ShiPinShouYe;
+import com.example.mylibrary.ShiPinWeiZhi;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-private DrawerLayout mDrawerLayout;
-private List<Fruit>fruitList=new ArrayList<>();
-private FruitAdapter adapter;
-    private MaterialSearchView searchView;
-    CunChu cunChu = new CunChu();
-    Fruit[]fruits = cunChu.fruits;
+    Button JinRu;
+    String hhh;
+    String aaa;
+    Httptxt httptxt = new Httptxt();
+    ListItem[] listItems = new ListItem[10];
+    String[] Name = new String[10];
+    String[] Uri = new String[10];
+    int a = 1;
+    int c = 0;
+    int b = 1;
+    int d = 0;
+    int e = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mDrawerLayout=findViewById(R.id.drawer_layout);
-        initFruits();
-        RecyclerView recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
-        GridLayoutManager layoutManager=new GridLayoutManager(this,1);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter=new FruitAdapter(fruitList);
-        recyclerView.setAdapter(adapter);
-        /*swipeReffresh =findViewById(R.id.swipr_refresh);
-        //swipeReffresh.setColorSchemeResources(R.color.colorPrimary);
-        swipeReffresh.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
+        sendRequestWithOkHttp();
+        sendRequestWithOkHttp1();
+        JinRu = findViewById(R.id.JinRu);
+        JinRu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRefresh() {
-                new Task().execute();
-            }
-        });*/
-        searchView = (MaterialSearchView) findViewById(R.id.search_view);
-        searchView.setVoiceSearch(false);
-        searchView.setCursorDrawable(R.drawable.color_cursor_white);
-        searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
-        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                /*Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
-                        .show();*/
-                if (query.equals("Java环境变量配置")) {
-                    Toast.makeText(MainActivity.this, "搜索成功！", Toast.LENGTH_LONG).show();
-                    Intent intent=new Intent(MainActivity.this,FuritActivity1.class);
-                    intent.putExtra("Uri","https://top1-video-public.cdn.bcebos.com/d2d0c13849f70fd626249c3ce8c4f465c7acb739.mp4");
-                    intent.putExtra("name", query);
-                    intent.putExtra(FruitActivity.FRUIT_NAME,query);
-                    intent.putExtra(FruitActivity.FRUIT_IMAGE_ID,R.mipmap.java);
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(MainActivity.this, "抱歉没有找到相关内容，如有需要可联系客服解决！", Toast.LENGTH_LONG).show();
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //Do some magic
-                return false;
-            }
-        });
-
-        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-                //Do some magic
-
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-                //Do some magic
+            public void onClick(View v) {
+                Num();
+                Intent intent=new Intent(MainActivity.this,Main2Activity.class);
+                Bundle b = new Bundle();
+                b.putStringArray("AAA",Name);
+                b.putStringArray("BBB",Uri);
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
     }
-   /* private class Task extends AsyncTask<Void, Void, String[]> {
-        @Override
-        protected String[] doInBackground(Void... voids) {
-            try {
-                //执行了2秒的睡眠
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return new String[0];
+    public void Num(){
+        while (e<10){
+            listItems[e] = new ListItem(Name[e], Uri[e]);
+            e++;
         }
-        @Override protected void onPostExecute(String[] result) {
-            //刷新列表后，调用setdreshing ( false )。动画结束
-            swipeReffresh.setRefreshing(false);
-            super.onPostExecute(result);
-            Toast.makeText(MainActivity.this,"HHHH",Toast.LENGTH_LONG).show();
-        }
-    }*/
-    private void initFruits(){
-        fruitList.clear();
-        int i;
-        for (i=0;i<fruits.length;i++) {
-            fruitList.add(fruits[i]);
-        }
+        //responseText.setText(""+listItems[1].getName());
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        MenuItem item = menu.findItem(R.id.action_search);
-        searchView.setMenuItem(item);
-
-
-        return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (searchView.isSearchOpen()) {
-            searchView.closeSearch();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == RESULT_OK) {
-            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (matches != null && matches.size() > 0) {
-                String searchWrd = matches.get(0);
-                if (!TextUtils.isEmpty(searchWrd)) {
-                    searchView.setQuery(searchWrd, false);
+    public void sendRequestWithOkHttp() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (a<11) {
+                        hhh = httptxt.openFile(a, "https://cdn.jsdelivr.net/gh/huanghaozi/Storage4App@master/20200821/20200821053513300515e558fd5b503a7fbbe08e754e5f.txt");
+                        //responseText.setText(hhh);
+                        //Log.d("PPPP",hhh);
+                        //responseText.setText(hhh);
+                        a++;
+                        Name[c] = hhh;
+                        c++;
+                        //Log.d("qqq", hhh);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+        }).start();
+    }
+    public void sendRequestWithOkHttp1() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (b<11) {
+                        aaa = httptxt.openFile(b, "https://cdn.jsdelivr.net/gh/huanghaozi/Storage4App@master/20200823/20200823030457a830da3b0f66f4415af6b2e08074570a.txt");
+                        //Log.d("sss",aaa);
+                        b++;
+                        Uri[d] = aaa;
+                        d++;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

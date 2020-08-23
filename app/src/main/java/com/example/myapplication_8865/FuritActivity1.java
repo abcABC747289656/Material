@@ -5,22 +5,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication_8865.view.BigImgActivity;
 import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
-import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
@@ -36,19 +35,19 @@ public class FuritActivity1 extends AppCompatActivity implements OnBannerListene
     private Banner banner;
     public FloatingActionButton FB;
     private ArrayList<String> list_path;
-    private String Uri,Name;
+    private String UriDiZhi,Name,UriTuPian;
     private TextView tv;
+    Httptxt httptxt = new Httptxt();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fruit1);
         Intent intent=getIntent();
         String fruitName=intent.getStringExtra(FRUIT_NAME);
-        int fruitImageId=intent.getIntExtra(FRUIT_IMAGE_ID,0);
+        String fruitImageId=intent.getStringExtra(FRUIT_IMAGE_ID);
         Toolbar toolbar=findViewById(R.id.toolbar);
         CollapsingToolbarLayout collapsingToolbar=findViewById(R.id.collapsing_toolbar);
         ImageView fruitImageView=findViewById(R.id.fruit_image_view);
-        //TextView fruitContentText=findViewById(R.id.fruit_content_text);
         FB = findViewById(R.id.FB);
         FB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,13 +63,13 @@ public class FuritActivity1 extends AppCompatActivity implements OnBannerListene
         collapsingToolbar.setTitle(fruitName);
         Glide.with(this).load(fruitImageId).into(fruitImageView);
         collapsingToolbar.setExpandedTitleColor(Color.BLACK);
-        //String fruitContent=generateFruitContent(fruitName);
-        //fruitContentText.setText(fruitContent);
         jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.jc_video);
-        Uri = intent.getStringExtra("Uri");
+        UriDiZhi = intent.getStringExtra("Uri");
         Name = intent.getStringExtra("name");
-        jcVideoPlayerStandard.setUp(Uri, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, Name);
-        jcVideoPlayerStandard.thumbImageView.setImageResource(fruitImageId);
+        UriTuPian = intent.getStringExtra("UriTuPian");
+
+        jcVideoPlayerStandard.setUp(UriDiZhi, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, Name);
+        Glide.with(FuritActivity1.this).load(UriTuPian).into(jcVideoPlayerStandard.thumbImageView);
         tv = findViewById(R.id.tv);
         tv.setText(Name);
     }
@@ -178,5 +177,17 @@ public class FuritActivity1 extends AppCompatActivity implements OnBannerListene
         });
         //    显示出该对话框
         builder.show();
+    }
+    public void sendRequestWithOkHttp() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String hhh = httptxt.openFile(1,"https://cdn.jsdelivr.net/gh/huanghaozi/Storage4App@master/20200819/20200819102247007310c41dedf09271766581ca3b0113.txt");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }
